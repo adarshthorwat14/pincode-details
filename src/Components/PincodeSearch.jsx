@@ -9,6 +9,7 @@ function PincodeSearch() {
   const [results, setResults] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [error, setError] = useState('');
+   const [isLoading, setIsLoading] = useState(false);
 
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
@@ -30,7 +31,7 @@ function PincodeSearch() {
 
       setError('');
       const output = [];
-
+      setIsLoading(true);
       for (const pin of pinCodes) {
         try {
           const res = await fetch(`https://api.postalpincode.in/pincode/${pin}`);
@@ -51,7 +52,7 @@ function PincodeSearch() {
           output.push({ pincode: pin, area: 'Error', district: '', state: '', block: '' });
         }
       }
-
+      setIsLoading(false);
       setResults((prev) => [...prev, ...output]);
     };
     reader.readAsBinaryString(file);
@@ -64,7 +65,9 @@ function PincodeSearch() {
       return;
     }
 
+
     setError('');
+     setIsLoading(true);
     try {
       const res = await fetch(`https://api.postalpincode.in/pincode/${pin}`);
       const json = await res.json();
@@ -93,6 +96,8 @@ function PincodeSearch() {
       setResults(combined);
     } catch (err) {
       setError('Error fetching PIN code details.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -113,6 +118,7 @@ function PincodeSearch() {
 
   return (
     <div className="dashboard-container">
+    {isLoading && <div className="loading-bar"></div>}
       <header className="header">
         <h1>Pincode Search</h1>
       </header>

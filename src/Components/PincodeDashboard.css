@@ -5,7 +5,22 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #333;
   }
+  .loading-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 4px;
+    width: 100%;
+    background-color: red;
+    animation: loading 2s linear infinite;
+    z-index: 1000;
+  }
   
+  @keyframes loading {
+    0% { transform: translateX(-100%); }
+    50% { transform: translateX(0); }
+    100% { transform: translateX(100%); }
+  }
   .header {
     display: flex;
     align-items: center;
